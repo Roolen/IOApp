@@ -50,6 +50,7 @@ int main()
 			<< std::endl;
 	}
 
+	free(students);
 	fclose(file);
 }
 
