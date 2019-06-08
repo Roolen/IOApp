@@ -11,7 +11,7 @@
 #include <iostream>
 #include <vector>
 
-#include "BinaryText.h"
+#include "BinaryText.hpp"
 
 student* EnterData(size_t* size);
 
@@ -19,28 +19,32 @@ const char* PATH = "File.bdf";
 
 int main()
 {
-	FILE* file;
+	FILE *file_w;
+	FILE *file_r;
 	// Открывает поток для файла.
-	fopen_s(&file, PATH, "wb+,ccs=UTF-8");
+	fopen_s(&file_w, PATH, "wb+,ccs=UTF-8");
 
 	// Возвращает 1, если чтение файла не удалось.
-	if (file == nullptr) return 1;
+	if (file_w == nullptr) return 1;
 
 	size_t size = 5;
 	student* students = EnterData(&size);
 
 	for (size_t i = 0; i < size; i++)
 	{
-		fwrite(&students[i], sizeof(student), 1, file);
+		fwrite(&students[i], sizeof(student), 1, file_w);
 	}
+	delete[] students;
 
-	fseek(file, 0, SEEK_SET);
+	fclose(file_w);
+	fopen_s(&file_r, PATH, "rb,ccs=UTF-8");
 
-	std::vector<student> readStudents;
-	readStudents.resize(size);
-	for (size_t i = 0; i < size; i++)
-	{
-		fread(&readStudents[i], sizeof(student), 1, file);
+	std::vector<student> readStudents(size);
+	if (file_r != nullptr) {
+		for (size_t i = 0; i < size; i++)
+		{
+			fread(&readStudents[i], sizeof(student), 1, file_r);
+		}
 	}
 
 	for (size_t i = 0; i < readStudents.size(); i++)
@@ -50,8 +54,7 @@ int main()
 			<< std::endl;
 	}
 
-	delete students;
-	fclose(file);
+	_fcloseall();
 }
 
 student* EnterData(size_t* size) {

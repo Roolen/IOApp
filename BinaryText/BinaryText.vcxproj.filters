@@ -18,11 +18,13 @@
     <ClCompile Include="BinaryText.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="BinaryText.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClCompile>
     <ClCompile Include="Student.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BinaryText.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
