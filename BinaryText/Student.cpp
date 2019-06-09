@@ -7,28 +7,45 @@
 
 typedef std::unordered_map<std::string, uint16_t> MapNames;
 
+uint16_t get_group_more_gender(std::vector<student> students, wchar_t gender) {
+	if (gender != 'M' && gender != 'F') return 0;
+	if (students.size() == 0) return 0;
 
-uint16_t get_group_more_man(std::vector<student> students) {
-	int group[4]{};
+	int numberGenders[5]{};	// Количество студентов заданного пола в курсах.
+	int numberAllGenders[5]{};	// Общее количество студентов на в курсах.
+
+	// Расчитывает количество человек с заданным полом в группах.
+	// И общее количество студентов в группах.
 	for (size_t i = 0; i < students.size(); i++)
 	{
-		if (students[i].gender == 'M')
-			group[students[i].course]++;
+		numberAllGenders[students[i].course - 1]++;
+
+		if (students[i].gender == gender)
+			numberGenders[students[i].course - 1]++;
 	}
 
-	int moreGroup = 0;
+	// Поиск группы с наибольшим процентом студентов заданного пола.
+	double max = 0.0;
+	int indexMoreGroup = 0;
 	for (size_t i = 0; i < 5; i++)
 	{
-		if (moreGroup < group[i])
-			moreGroup = group[i];
+		if (numberAllGenders == 0 || numberGenders[i] == 0) continue;
+		if (max < (numberGenders[i] / numberAllGenders[i])) {
+			indexMoreGroup = i+1;
+			max = numberGenders[i] / numberAllGenders[i];
+		}
 	}
 
-	return moreGroup;
+	return indexMoreGroup;
 }
 
 std::string get_most_popular_name(std::vector<student> students, wchar_t gender) {
-	MapNames names;
+	if (gender != 'M' && gender != 'F') return "Invalid gender";
+	if (students.size() == 0) return "Invalid count students";
 
+	MapNames names; // <key=имя, value=число_упоминаний>
+
+	// Заполнение словаря значениями.
 	for (size_t i = 0; i < students.size(); i++)
 	{
 		if (students[i].gender != gender) continue;
@@ -42,6 +59,7 @@ std::string get_most_popular_name(std::vector<student> students, wchar_t gender)
 		}
 	}
 
+	// Поиск самого популярного имени.
 	std::string popularName;
 	for (auto name : names) {
 		if (name.second > names[popularName])

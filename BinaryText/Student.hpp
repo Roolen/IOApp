@@ -1,5 +1,9 @@
 #pragma once
 
+#include <stdint.h>
+#include <vector>
+#include <string>
+
 #pragma pack(push, 1)
 struct student {
 	const char* name;
@@ -11,5 +15,5 @@ struct student {
 #pragma pack(pop)
 
 student* enter_data(size_t* size);
-uint16_t get_group_more_man(std::vector<student> students);
+uint16_t get_group_more_gender(std::vector<student> students, wchar_t gender);
 std::string get_most_popular_name(std::vector<student> students, wchar_t gender);

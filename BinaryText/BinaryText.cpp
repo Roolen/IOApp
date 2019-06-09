@@ -26,22 +26,38 @@ const char* PATH = "File.bdf";
 int main()
 {
 	FILE *file_w, *file_r;
-	// Открывает поток для файла.
+	// Открывает поток на запись для файла.
 	fopen_s(&file_w, PATH, "wb+,ccs=UTF-8");
 
 	// Возвращает 1, если чтение файла не удалось.
-	if (file_w == nullptr) return 1;
+	if (file_w == nullptr) {
+		std::cout << "Read file is failure";
+		return 1;
+	}
 
-	size_t size = 7;
+	// Пользователь вводит количество студентов.
+	int32_t tmpSize = 0;
+	std::cout << "Enter count students:";
+	std::cin >> tmpSize;
+	// Если число пользователей меньше нуля - ошибка.
+	if (tmpSize <= 0) {
+		std::cout << "Entered of number students is invalid!";
+		return 2;
+	}
+	size_t size = tmpSize;
+	// Заполняем массив информацией о студентах.
 	student* students = enter_data();
 
+	// Записываем данные о студентах в двоичный файл.
 	fwrite(students, sizeof(student), size, file_w);
 
 	delete[] students;
 
 	fclose(file_w);
+	// Открываем поток на чтение для файла.
 	fopen_s(&file_r, PATH, "rb,ccs=UTF-8");
 
+	// Считываем данные о студентах, из двоичного файла.
 	std::vector<student> readStudents(size);
 	if (file_r != nullptr) {
 		for (size_t i = 0; i < size; i++)
@@ -50,6 +66,7 @@ int main()
 		}
 	}
 
+	// Выводим данные о студентах на консоль.
 	for (size_t i = 0; i < readStudents.size(); i++)
 	{
 		std::cout << readStudents[i].name << " " << (int)readStudents[i].age << " " 
@@ -57,14 +74,14 @@ int main()
 			<< std::endl;
 	}
 
-	uint16_t groupWithMoreMan = get_group_more_man(readStudents);
-	std::cout << "Group with more procent men: " << groupWithMoreMan << std::endl;
+	std::cout << "Group with more procent men: " << get_group_more_gender(readStudents, 'M') << std::endl;
 	std::cout << "Most popular name of men: " << get_most_popular_name(readStudents, 'M') << std::endl;
 	std::cout << "Most popular name of girl: " << get_most_popular_name(readStudents, 'F') << std::endl;
 
 	_fcloseall();
 }
 
+// For DEBUG.
 student* enter_data() {
 	// FREE MEMORY AFTER USE
 	student* students = new student[7];
@@ -76,7 +93,7 @@ student* enter_data() {
 		*(students + 2) = { "Andrei", "Gruchevski", 'M', 23, 2 };
 		*(students + 3) = { "Anna", "Zaparoshskuya", 'F', 17, 1 };
 		*(students + 4) = { "Ulia", "Kalmukova", 'F', 21, 4 };
-		*(students + 5) = { "Radion", "Raskolnikov", 'M', 20, 2 };
+		*(students + 5) = { "Radion", "Raskolnikov", 'M', 20, 3 };
 		*(students + 6) = { "Ulia", "Terechkova", 'F', 24, 3 };
 	}
 
@@ -84,8 +101,6 @@ student* enter_data() {
 }
 
 student* enter_data(size_t* size) {
-	if (*size <= 0) return nullptr;
-
 	student *students = new student[*size];
 
 	wchar_t gender = ' ';
