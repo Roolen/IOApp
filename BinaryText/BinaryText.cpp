@@ -16,12 +16,10 @@
 #include <vector>
 #include <unordered_map>
 
-#include "BinaryText.hpp"
+#include "Student.hpp"
 
+student* enter_data();
 student* enter_data(size_t* size);
-uint16_t get_group_more_man(std::vector<student>);
-std::string get_most_popular_name(std::vector<student>, wchar_t);
-typedef std::unordered_map<std::string, uint16_t> MapNames;
 
 const char* PATH = "File.bdf";
 
@@ -35,12 +33,10 @@ int main()
 	if (file_w == nullptr) return 1;
 
 	size_t size = 7;
-	student* students = enter_data(&size);
+	student* students = enter_data();
 
-	for (size_t i = 0; i < size; i++)
-	{
-		fwrite(&students[i], sizeof(student), 1, file_w);
-	}
+	fwrite(students, sizeof(student), size, file_w);
+
 	delete[] students;
 
 	fclose(file_w);
@@ -66,67 +62,50 @@ int main()
 	std::cout << "Most popular name of men: " << get_most_popular_name(readStudents, 'M') << std::endl;
 	std::cout << "Most popular name of girl: " << get_most_popular_name(readStudents, 'F') << std::endl;
 
-
 	_fcloseall();
 }
 
-student* enter_data(size_t* size) {
+student* enter_data() {
 	// FREE MEMORY AFTER USE
-	student* students = new student[*size];
+	student* students = new student[7];
 
 	if (students != nullptr)
 	{
-	*students = { "Mask", "Ilon", 'M', 20, 3 };
-	*(students + 1) = { "Andrei", "Andreiv",'M', 19, 1 };
-	*(students + 2) = { "Andrei", "Gruchevski", 'M', 23, 2 };
-	*(students + 3) = { "Anna", "Zaparoshskuya", 'F', 17, 1 };
-	*(students + 4) = { "Ulia", "Kalmukova", 'F', 21, 4 };
-	*(students + 5) = { "Radion", "Raskolnikov", 'M', 20, 2 };
-	*(students + 6) = { "Ulia", "Terechkova", 'F', 24, 3 };
+		*students = { "Mask", "Ilon", 'M', 20, 3 };
+		*(students + 1) = { "Andrei", "Andreiv",'M', 19, 1 };
+		*(students + 2) = { "Andrei", "Gruchevski", 'M', 23, 2 };
+		*(students + 3) = { "Anna", "Zaparoshskuya", 'F', 17, 1 };
+		*(students + 4) = { "Ulia", "Kalmukova", 'F', 21, 4 };
+		*(students + 5) = { "Radion", "Raskolnikov", 'M', 20, 2 };
+		*(students + 6) = { "Ulia", "Terechkova", 'F', 24, 3 };
 	}
 
 	return students;
 }
 
-uint16_t get_group_more_man(std::vector<student> students) {
-	int group[4]{};
-	for (size_t i = 0; i < students.size(); i++)
+student* enter_data(size_t* size) {
+	if (*size <= 0) return nullptr;
+
+	student *students = new student[*size];
+
+	wchar_t gender = ' ';
+	uint16_t age, course;
+	for (size_t i = 0; i < *size; i++)
 	{
-		if (students[i].gender == 'M')
-			group[students[i].course]++;
+		char* name = new char[12];
+		char* secondName = new char[12];
+
+		std::cout << "Student " << i+1 << std::endl
+			<< "Enter name and second name of student:";
+		std::cin >> name >> secondName;
+		std::cout << "Enter student gender(M or F in uppercase): ";
+		std::cin.get();
+		std::wcin >> gender;
+		std::cout << "Enter student age(16-35) and course(1-5): ";
+		std::cin >> age >> course;
+
+		*(students + i) = {name, secondName, (wchar_t)gender, (uint8_t)age, (uint8_t)course};
 	}
 
-	int moreGroup = 0;
-	for (size_t i = 0; i < 5; i++)
-	{
-		if (moreGroup < group[i])
-			moreGroup = group[i];
-	}
-
-	return moreGroup;
-}
-
-std::string get_most_popular_name(std::vector<student> students, wchar_t gender) {
-	MapNames names;
-
-	for (size_t i = 0; i < students.size(); i++)
-	{
-		if (students[i].gender != gender) continue;
-
-		if (names.count(students[i].name))
-			names.at(students[i].name)++;
-		else
-		{
-			std::pair<std::string, uint16_t> name = std::make_pair(students[i].name, 1);
-			names.insert(name);
-		}
-	}
-
-	std::string popularName;
-	for (auto name : names) {
-		if (name.second > names[popularName])
-			popularName = name.first;
-	}
-
-	return popularName;
+	return students;
 }
