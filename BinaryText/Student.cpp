@@ -11,11 +11,11 @@ uint16_t get_group_more_gender(std::vector<student> students, wchar_t gender) {
 	if (gender != 'M' && gender != 'F') return 0;
 	if (students.size() == 0) return 0;
 
-	int numberGenders[5]{};	// Количество студентов заданного пола в курсах.
-	int numberAllGenders[5]{};	// Общее количество студентов на в курсах.
+	int numberGenders[5]{};	// ГЉГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г±ГІГіГ¤ГҐГ­ГІГ®Гў Г§Г Г¤Г Г­Г­Г®ГЈГ® ГЇГ®Г«Г  Гў ГЄГіГ°Г±Г Гµ.
+	int numberAllGenders[5]{};	// ГЋГЎГ№ГҐГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г±ГІГіГ¤ГҐГ­ГІГ®Гў Г­Г  Гў ГЄГіГ°Г±Г Гµ.
 
-	// Расчитывает количество человек с заданным полом в группах.
-	// И общее количество студентов в группах.
+	// ГђГ Г±Г·ГЁГІГ»ГўГ ГҐГІ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г·ГҐГ«Г®ГўГҐГЄ Г± Г§Г Г¤Г Г­Г­Г»Г¬ ГЇГ®Г«Г®Г¬ Гў ГЈГ°ГіГЇГЇГ Гµ.
+	// Г€ Г®ГЎГ№ГҐГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г±ГІГіГ¤ГҐГ­ГІГ®Гў Гў ГЈГ°ГіГЇГЇГ Гµ.
 	for (size_t i = 0; i < students.size(); i++)
 	{
 		numberAllGenders[students[i].course - 1]++;
@@ -24,7 +24,7 @@ uint16_t get_group_more_gender(std::vector<student> students, wchar_t gender) {
 			numberGenders[students[i].course - 1]++;
 	}
 
-	// Поиск группы с наибольшим процентом студентов заданного пола.
+	// ГЏГ®ГЁГ±ГЄ ГЈГ°ГіГЇГЇГ» Г± Г­Г ГЁГЎГ®Г«ГјГёГЁГ¬ ГЇГ°Г®Г¶ГҐГ­ГІГ®Г¬ Г±ГІГіГ¤ГҐГ­ГІГ®Гў Г§Г Г¤Г Г­Г­Г®ГЈГ® ГЇГ®Г«Г .
 	double max = 0.0;
 	int indexMoreGroup = 0;
 	for (size_t i = 0; i < 5; i++)
@@ -39,13 +39,14 @@ uint16_t get_group_more_gender(std::vector<student> students, wchar_t gender) {
 	return indexMoreGroup;
 }
 
+
 std::string get_most_popular_name(std::vector<student> students, wchar_t gender) {
 	if (gender != 'M' && gender != 'F') return "Invalid gender";
 	if (students.size() == 0) return "Invalid count students";
 
-	MapNames names; // <key=имя, value=число_упоминаний>
+	MapNames names; // <key=ГЁГ¬Гї, value=Г·ГЁГ±Г«Г®_ГіГЇГ®Г¬ГЁГ­Г Г­ГЁГ©>
 
-	// Заполнение словаря значениями.
+	// Г‡Г ГЇГ®Г«Г­ГҐГ­ГЁГҐ Г±Г«Г®ГўГ Г°Гї Г§Г­Г Г·ГҐГ­ГЁГїГ¬ГЁ.
 	for (size_t i = 0; i < students.size(); i++)
 	{
 		if (students[i].gender != gender) continue;
@@ -59,7 +60,7 @@ std::string get_most_popular_name(std::vector<student> students, wchar_t gender)
 		}
 	}
 
-	// Поиск самого популярного имени.
+	// ГЏГ®ГЁГ±ГЄ Г±Г Г¬Г®ГЈГ® ГЇГ®ГЇГіГ«ГїГ°Г­Г®ГЈГ® ГЁГ¬ГҐГ­ГЁ.
 	std::string popularName;
 	for (auto name : names) {
 		if (name.second > names[popularName])
