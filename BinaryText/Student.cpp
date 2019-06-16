@@ -11,11 +11,11 @@ uint16_t get_group_more_gender(std::vector<student> students, wchar_t gender) {
 	if (gender != 'M' && gender != 'F') return 0;
 	if (students.size() == 0) return 0;
 
-	int numberGenders[5]{};	// Êîëè÷åñòâî ñòóäåíòîâ çàäàííîãî ïîëà â êóðñàõ.
-	int numberAllGenders[5]{};	// Îáùåå êîëè÷åñòâî ñòóäåíòîâ íà â êóðñàõ.
+	int numberGenders[5]{};	// Содержит количество студентов определённого пола, по группам.
+	int numberAllGenders[5]{};	// Содержит общее количество студентов по группам.
 
-	// Ðàñ÷èòûâàåò êîëè÷åñòâî ÷åëîâåê ñ çàäàííûì ïîëîì â ãðóïïàõ.
-	// È îáùåå êîëè÷åñòâî ñòóäåíòîâ â ãðóïïàõ.
+	// Расчитывает количество человек с заданным полом в группах.
+	// И общее количество студентов в группах.
 	for (size_t i = 0; i < students.size(); i++)
 	{
 		numberAllGenders[students[i].course - 1]++;
@@ -24,7 +24,7 @@ uint16_t get_group_more_gender(std::vector<student> students, wchar_t gender) {
 			numberGenders[students[i].course - 1]++;
 	}
 
-	// Ïîèñê ãðóïïû ñ íàèáîëüøèì ïðîöåíòîì ñòóäåíòîâ çàäàííîãî ïîëà.
+	// Поиск группы с наибольшим процентом студентов заданного пола.
 	double max = 0.0;
 	int indexMoreGroup = 0;
 	for (size_t i = 0; i < 5; i++)
@@ -44,9 +44,9 @@ std::string get_most_popular_name(std::vector<student> students, wchar_t gender)
 	if (gender != 'M' && gender != 'F') return "Invalid gender";
 	if (students.size() == 0) return "Invalid count students";
 
-	MapNames names; // <key=èìÿ, value=÷èñëî_óïîìèíàíèé>
+	MapNames names; // <key=имя, value=число_упоминаний>
 
-	// Çàïîëíåíèå ñëîâàðÿ çíà÷åíèÿìè.
+	// Заполнение словаря значениями.
 	for (size_t i = 0; i < students.size(); i++)
 	{
 		if (students[i].gender != gender) continue;
@@ -60,7 +60,7 @@ std::string get_most_popular_name(std::vector<student> students, wchar_t gender)
 		}
 	}
 
-	// Ïîèñê ñàìîãî ïîïóëÿðíîãî èìåíè.
+	// Поиск самого популярного имени.
 	std::string popularName;
 	for (auto name : names) {
 		if (name.second > names[popularName])
