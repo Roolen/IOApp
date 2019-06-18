@@ -153,6 +153,9 @@
   <ItemGroup>
     <ClCompile Include="ReaderFile.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="respondent.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
